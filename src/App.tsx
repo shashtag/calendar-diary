@@ -1,19 +1,12 @@
+import Calendar from "./Components/Calendar";
+import Header from "./Components/Header";
+
 function App() {
   return (
-    <h1 className='grid grid-cols-7'>
-      <div className='border text-center font-medium'>S</div>
-      <div className='border text-center font-medium'>M</div>
-      <div className='border text-center font-medium'>T</div>
-      <div className='border text-center font-medium'>W</div>
-      <div className='border text-center font-medium'>T</div>
-      <div className='border text-center font-medium'>F</div>
-      <div className='border text-center font-medium'>S</div>
-      <div className='border border-black'>aa</div>
-      <div className='border border-black'>aa</div>
-      <div className='border border-black'>aa</div>
-      <div className='border border-black'>aa</div>
-      <div className='border border-black'>aa</div>
-    </h1>
+    <>
+      <Header />
+      <Calendar />
+    </>
   );
 }
 
