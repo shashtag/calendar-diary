@@ -25,17 +25,20 @@ function getYear(year: number) {
   return yearMatrix;
 }
 
+const today = dayjs();
+
 const useGetCalendar = () => {
   const [calendar, setCalendar] = useState<any>([]);
   const firstMount = useRef(true);
+
   useEffect(() => {
     if (firstMount.current) {
       firstMount.current = false;
-      const thisYear = dayjs().year();
+
       const cal = [
-        { year: thisYear - 1, calendar: getYear(thisYear - 1) },
-        { year: thisYear, calendar: getYear(thisYear) },
-        { year: thisYear + 1, calendar: getYear(thisYear + 1) },
+        { year: today.year() - 1, calendar: getYear(today.year() - 1) },
+        { year: today.year(), calendar: getYear(today.year()) },
+        { year: today.year() + 1, calendar: getYear(today.year() + 1) },
       ];
 
       setCalendar(cal);
@@ -44,7 +47,7 @@ const useGetCalendar = () => {
     return () => {};
   }, []);
 
-  return { calendar, setCalendar };
+  return { calendar, today, setCalendar, getYear };
 };
 
 export default useGetCalendar;
