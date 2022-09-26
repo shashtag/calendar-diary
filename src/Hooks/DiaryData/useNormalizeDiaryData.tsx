@@ -6,7 +6,6 @@ const useNormalizeDiaryData = (data: ApiDataType) => {
     const diaryData: { [key: string]: DiaryPostType[] } = {};
     let fetchedTill: Dayjs = dayjs();
     if (data) {
-      console.log(data);
       data.pages.forEach((page: APIPageType) =>
         page.posts.forEach((element: DiaryPostType) => {
           if (diaryData[element.calendardatetime.split("T")[0]] === undefined)

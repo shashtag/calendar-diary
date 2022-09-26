@@ -27,7 +27,6 @@ const Calendar = () => {
 
   useEffect(() => {
     let firstDay = calendar[0].yearCalendar[0][0][0];
-    console.log(fetchedTill);
     if (fetchedTill.diff(firstDay) > 0) fetchNextPage();
 
     return () => {};
