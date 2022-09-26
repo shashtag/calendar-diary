@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 
 function getMonth(year: number, month: number) {
   const firstDayOfMonth = dayjs(new Date(year, month, 1));
@@ -19,7 +19,7 @@ function getMonth(year: number, month: number) {
 }
 
 function getYear(year: number) {
-  const yearMatrix = new Array(12).fill([]).map((data, i) => {
+  const yearMatrix = new Array(12).fill([]).map((_, i) => {
     return getMonth(year, i);
   });
   return yearMatrix;
@@ -28,24 +28,11 @@ function getYear(year: number) {
 const today = dayjs();
 
 const useGetCalendar = () => {
-  const [calendar, setCalendar] = useState<any>([]);
-  const firstMount = useRef(true);
-
-  useEffect(() => {
-    if (firstMount.current) {
-      firstMount.current = false;
-
-      const cal = [
-        { year: today.year() - 1, calendar: getYear(today.year() - 1) },
-        { year: today.year(), calendar: getYear(today.year()) },
-        { year: today.year() + 1, calendar: getYear(today.year() + 1) },
-      ];
-
-      setCalendar(cal);
-    }
-
-    return () => {};
-  }, []);
+  const [calendar, setCalendar] = useState([
+    { year: today.year() - 1, calendar: getYear(today.year() - 1) },
+    { year: today.year(), calendar: getYear(today.year()) },
+    { year: today.year() + 1, calendar: getYear(today.year() + 1) },
+  ]);
 
   return { calendar, today, setCalendar, getYear };
 };

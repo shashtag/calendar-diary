@@ -5,7 +5,7 @@ const useScroll = () => {
     if (node !== null) {
       window.scrollTo({
         top: node.offsetTop - (window.innerHeight - node.offsetHeight) / 2,
-        behavior: "smooth",
+        behavior: "auto",
       });
     }
   }, []);

@@ -1,9 +1,8 @@
-import React, { useCallback } from "react";
+import { useCallback } from "react";
 
 const useIntersection = (firstNovIntersectionHandler: any) => {
   const observer = new IntersectionObserver(([entry]) => {
     if (entry.isIntersecting) {
-      console.log(entry);
       firstNovIntersectionHandler();
     }
   });
@@ -11,6 +10,7 @@ const useIntersection = (firstNovIntersectionHandler: any) => {
     if (node !== null) {
       observer.observe(node);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 };
 

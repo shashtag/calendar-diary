@@ -1,0 +1,9 @@
+.selected{
+  transform: scale(1) !important;
+  
+}
+.slide{
+  transform: scale(0.8);
+  transition: transform 300ms;
+}
+
