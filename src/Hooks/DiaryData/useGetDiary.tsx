@@ -40,8 +40,8 @@ const fetchDiary = ({ pageParam = null }) =>
 const useGetDiary = () => {
   return useInfiniteQuery("get-diary", fetchDiary, {
     getNextPageParam: (lastPage, pages) => {
-      // console.log(lastPage.continuationtoken);
-      return { ...lastPage.continuationtoken };
+      if (lastPage.continuationtoken) return { ...lastPage.continuationtoken };
+      else return undefined;
     },
     refetchOnWindowFocus: false,
     refetchOnMount: false,

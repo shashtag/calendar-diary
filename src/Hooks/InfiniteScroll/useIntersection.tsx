@@ -1,12 +1,12 @@
 import { useCallback } from "react";
 
-const useIntersection = (firstNovIntersectionHandler: any) => {
+const useIntersection = (extendHandler: () => void) => {
   const observer = new IntersectionObserver(([entry]) => {
     if (entry.isIntersecting) {
-      firstNovIntersectionHandler();
+      extendHandler();
     }
   });
-  return useCallback((node: any) => {
+  return useCallback((node: HTMLDivElement) => {
     if (node !== null) {
       observer.observe(node);
     }

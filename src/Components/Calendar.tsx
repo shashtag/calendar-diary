@@ -1,13 +1,14 @@
-import React, { useMemo } from "react";
+import React, { useEffect } from "react";
 import useGetcalendar from "../Hooks/useGetCalendar";
 import months from "../Data/months";
 import { Dayjs } from "dayjs";
 import useInitialScroll from "../Hooks/useInitialScroll";
 import useIntersection from "../Hooks/InfiniteScroll/useIntersection";
-import useGetDiary from "../Hooks/useGetDiary";
-import useFirstNovJanIntersectionHandler from "../Hooks/InfiniteScroll/usefirstNovJanIntersectionHandler";
-import useLastFebDecIntersectionHandler from "../Hooks/InfiniteScroll/uselastFebDecIntersectionHandler";
+import useGetDiary from "../Hooks/DiaryData/useGetDiary";
+import useExtendUpHandler from "../Hooks/InfiniteScroll/useExtendUpHandler";
+import useExtendDownHandler from "../Hooks/InfiniteScroll/useExtendDownHandler";
 import Post from "./Post/Post";
+import useNormalizeDiaryData from "../Hooks/DiaryData/useNormalizeDiaryData";
 
 const Calendar = () => {
   const { data, isLoading, isError, error, fetchNextPage } = useGetDiary();
@@ -16,66 +17,44 @@ const Calendar = () => {
 
   const scroll = useInitialScroll();
 
-  const firstNovJanIntersectionHandler = useFirstNovJanIntersectionHandler(
-    setCalendar,
-    getYear,
-  );
-  const lastFebDecIntersectionHandler = useLastFebDecIntersectionHandler(
-    setCalendar,
-    getYear,
-  );
+  const extendUpHandler = useExtendUpHandler(setCalendar, getYear);
+  const extendDownHandler = useExtendDownHandler(setCalendar, getYear);
 
-  const firstNov = useIntersection(firstNovJanIntersectionHandler);
-  const firstJan = useIntersection(firstNovJanIntersectionHandler);
-  const lastFeb = useIntersection(lastFebDecIntersectionHandler);
-  const lastDec = useIntersection(lastFebDecIntersectionHandler);
+  const extendUp = useIntersection(extendUpHandler);
+  const extendDown = useIntersection(extendDownHandler);
 
-  const diaryDataObj = useMemo(() => {
-    const diaryData: any = {};
-    console.log(data);
-    if (data) {
-      data.pages.forEach((page) =>
-        page.posts.forEach((element: any) => {
-          // console.log(element);
+  const { fetchedTill, diaryData } = useNormalizeDiaryData(data as ApiDataType);
 
-          if (diaryData[element.calendardatetime.split("T")[0]] === undefined)
-            diaryData[element.calendardatetime.split("T")[0]] = [];
-          diaryData[element.calendardatetime.split("T")[0]].push(element);
-        }),
-      );
-    }
-    return diaryData;
-  }, [data]);
+  useEffect(() => {
+    let firstDay = calendar[0].yearCalendar[0][0][0];
+    console.log(fetchedTill);
+    if (fetchedTill.diff(firstDay) > 0) fetchNextPage();
+
+    return () => {};
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data, calendar]);
 
   if (isLoading) return <div className='mt-8 text-2xl'>Loading...</div>;
   if (isError)
     return (
       <div className='mt-8 text-2xl'>Error : {(error as Error).message}</div>
     );
-  // console.log(diaryDataObj);
-  // console.log(today);
+
   // usning index as key as I will not be sorting or manipulating the sub arrays
   return (
     <div className='mt-8'>
-      <button className='fixed' onClick={() => fetchNextPage()}>
-        sssksdks
-      </button>
       {calendar?.map((year: YearType, l: number) => (
         <React.Fragment key={year.year}>
           <div className='text-center'>{year.year}</div>
-          {year?.calendar?.map((month: Dayjs[][], i: number) => (
+          {year?.yearCalendar?.map((month: Dayjs[][], i: number) => (
             <React.Fragment key={months[i]}>
               <div
                 className='text-center'
                 ref={
-                  l === 0 && i === 10
-                    ? firstNov
-                    : l === calendar.length - 1 && i === 1
-                    ? lastFeb
-                    : l === 0 && i === 0
-                    ? firstJan
-                    : l === calendar.length - 1 && i === 11
-                    ? lastDec
+                  l === 0 && (i === 0 || i === 5)
+                    ? extendUp
+                    : l === calendar.length - 1 && (i === 6 || i === 11)
+                    ? extendDown
                     : undefined
                 }>
                 {months[i]}
@@ -83,7 +62,7 @@ const Calendar = () => {
               <div className='grid grid-cols-7 '>
                 {month?.map((week: Dayjs[]) =>
                   week?.map((day: Dayjs) => {
-                    let date = day.toISOString().split("T")[0];
+                    let date = day.add(1, "day").toISOString().split("T")[0];
                     if (day.month() === i)
                       return (
                         <div
@@ -103,8 +82,8 @@ const Calendar = () => {
                           <div>{day.date()}</div>
 
                           <div style={{ aspectRatio: 3 / 4 }} className='p-2'>
-                            {diaryDataObj[date] ? (
-                              <Post posts={diaryDataObj[date]} />
+                            {diaryData[date] ? (
+                              <Post posts={diaryData[date]} />
                             ) : null}
                           </div>
                         </div>
@@ -119,6 +98,6 @@ const Calendar = () => {
       ))}
     </div>
   );
-};;
+};
 
 export default Calendar;

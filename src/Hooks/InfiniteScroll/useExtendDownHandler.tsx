@@ -1,15 +1,8 @@
 import { Dayjs } from "dayjs";
 import React, { useCallback } from "react";
 
-const useFirstNovJanIntersectionHandler = (
-  setCalendar: React.Dispatch<
-    React.SetStateAction<
-      {
-        year: number;
-        calendar: Dayjs[][][];
-      }[]
-    >
-  >,
+const useExtendDownHandler = (
+  setCalendar: React.Dispatch<React.SetStateAction<YearType[]>>,
   getYear: (year: number) => Dayjs[][][],
 ) => {
   return useCallback(() => {
@@ -17,11 +10,11 @@ const useFirstNovJanIntersectionHandler = (
       ...prev,
       {
         year: prev[prev.length - 1].year + 1,
-        calendar: getYear(prev[prev.length - 1].year + 1),
+        yearCalendar: getYear(prev[prev.length - 1].year + 1),
       },
     ]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 };
 
-export default useFirstNovJanIntersectionHandler;
+export default useExtendDownHandler;

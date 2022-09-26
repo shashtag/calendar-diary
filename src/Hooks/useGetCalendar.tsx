@@ -29,9 +29,8 @@ const today = dayjs();
 
 const useGetCalendar = () => {
   const [calendar, setCalendar] = useState([
-    { year: today.year() - 1, calendar: getYear(today.year() - 1) },
-    { year: today.year(), calendar: getYear(today.year()) },
-    { year: today.year() + 1, calendar: getYear(today.year() + 1) },
+    { year: today.year(), yearCalendar: getYear(today.year()) },
+    { year: today.year() + 1, yearCalendar: getYear(today.year() + 1) },
   ]);
 
   return { calendar, today, setCalendar, getYear };

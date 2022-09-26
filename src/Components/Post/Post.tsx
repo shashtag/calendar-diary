@@ -5,11 +5,13 @@ import { XMarkIcon } from "@heroicons/react/24/solid";
 import { StarIcon } from "@heroicons/react/24/solid";
 import "./Post.css";
 
-const Day = ({ posts }: any) => {
-  console.log(posts);
+type Props = {
+  posts: DiaryPostType[];
+};
+
+const Day = ({ posts }: Props) => {
   const [showCarousel, setShowCarousel] = useState(false);
   useEffect(() => {
-    console.log(document.getElementsByClassName("previous"));
     if (showCarousel) document.body.style.overflow = "hidden";
     else document.body.style.overflow = "scroll";
 
@@ -57,7 +59,7 @@ const Day = ({ posts }: any) => {
               showStatus={false}
               // showStatus={false}
               centerSlidePercentage={76}>
-              {posts.map((post: any) => (
+              {posts.map((post: DiaryPostType) => (
                 <div
                   key={post.id}
                   className='border rounded-lg border-black -mx-2 overflow-hidden bg-white'>
@@ -74,12 +76,8 @@ const Day = ({ posts }: any) => {
                   <div className='w-full flex justify-end p-2'>
                     {getStar(post.rating)}
                   </div>
-                  <div className='text-start px-2 pt-2 mb-4 line-clamp-3'>
-                    {post.text} Lorem ipsum dolor sit amet consectetur,
-                    adipisicing elit. Eligendi assumenda optio mollitia
-                    accusantium adipisci culpa recusandae eius possimus eveniet
-                    et deserunt facere enim nihil cum a delectus, rem ullam
-                    odit?
+                  <div className='text-start px-2 pt-2 mb-4 line-clamp-3 h-[80px]'>
+                    {post.text}
                   </div>
                   <hr />
                   <div className='py-2 text-xl font-semibold'>
