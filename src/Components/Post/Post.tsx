@@ -49,9 +49,11 @@ const Day = ({ posts }: Props) => {
           <div className='mx-auto max-w-md h-full flex items-center'>
             <Carousel
               selectedItem={0}
-              className=' w-full h-fit '
+              className={` w-full h-fit ${
+                posts.length > 1 ? "" : "scale-[0.8] rounded-lg overflow-hidden"
+              }`}
               emulateTouch
-              infiniteLoop
+              infiniteLoop={posts.length > 1}
               centerMode
               showThumbs={false}
               showIndicators={false}
@@ -62,9 +64,11 @@ const Day = ({ posts }: Props) => {
               {posts.map((post: DiaryPostType) => (
                 <div
                   key={post.id}
-                  className='border rounded-lg border-black -mx-2 overflow-hidden bg-white'>
+                  className={`border rounded-lg border-black ${
+                    posts.length > 1 ? "-mx-2" : ""
+                  } overflow-hidden bg-white`}>
                   <div
-                    className='w-full overflow-hidden flex align-middle'
+                    className='w-full overflow-hidden  flex align-middle'
                     style={{ aspectRatio: 3 / 4 }}>
                     <img
                       src={post.media[0].mediaurl}
